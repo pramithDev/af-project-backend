@@ -54,7 +54,6 @@ app.get('/', (req, res) => {
     res.json({"hello": " I am happy to deployment neww"})
 })
   
-
 // Create storage engine
 const storage = new GridFsStorage({
     url: mongoURI,
@@ -77,7 +76,7 @@ const storage = new GridFsStorage({
 
 const upload = multer({ storage });
 
-app.post("/image/upload-image/", upload.single("file"), (req, res, err) => {
+app.post("/image/upload-image/", upload.single("img"), (req, res, err) => {
     res.send(req.files);
 });
 
@@ -92,16 +91,16 @@ app.get("/image/get-image/:filename", (req, res) => {
         }
 
         // Check if image
-     //   if (file.contentType === "image/jpeg" || file.contentType === "image/png" || file.contentType === "image/jpg") {
+        if (file.contentType === "image/jpeg" || file.contentType === "image/png" || file.contentType === "image/jpg") {
             // Read output to browser
             const readstream = gfs.createReadStream(file.filename);
             readstream.pipe(res);
-        // } else {
-        //     console.log("Not an image");
-        //     res.status(404).json({
-        //         err: "Not an image"
-        //     });
-        // }
+        } else {
+            console.log("Not an image");
+            res.status(404).json({
+                err: "Not an image"
+            });
+        }
     });
 });
 
